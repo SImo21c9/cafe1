@@ -1,25 +1,62 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.8.34511.84
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project cafe", "Project cafe\Project cafe.csproj", "{93465354-80B4-45D7-9FAB-054DB437A644}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{93465354-80B4-45D7-9FAB-054DB437A644}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{93465354-80B4-45D7-9FAB-054DB437A644}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{93465354-80B4-45D7-9FAB-054DB437A644}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{93465354-80B4-45D7-9FAB-054DB437A644}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {418190F5-61DF-496E-A74F-AEFAB622301C}
-	EndGlobalSection
-EndGlobal
+using System;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        int[] productIds = { 9000, 2, 3 };
+        string[] productNames = { "Produkt 1", "Produkt 2", "Produkt 3" };
+        decimal[] productPrices = { 10.99m, 20.99m, 30.99m };
+        int[] productStocks = { 100, 50, 75 };
+
+        Console.WriteLine("Velkommen til vores butik!");
+
+        // Display the products in the store
+        for (int i = 0; i < productIds.Length; i++)
+        {
+            Console.WriteLine($"ID: {productIds[i]}, Navn: {productNames[i]}, Pris: {productPrices[i]:C}, Lagerbeholdning: {productStocks[i]}");
+        }
+
+        // Simulate scanning of product ID
+        Console.WriteLine("Scan produkt ID:");
+        int productId;
+        while (!int.TryParse(Console.ReadLine(), out productId) || !Array.Exists(productIds, id => id == productId))
+        {
+            Console.WriteLine("Fejl: Ugyldigt produkt ID.");
+            Console.WriteLine("Scan produkt ID:");
+        }
+
+        // Prompt user to enter quantity
+        Console.WriteLine("Indtast antallet du ønsker at købe: ");
+        int quantity;
+        while (!int.TryParse(Console.ReadLine(), out quantity))
+        {
+            Console.WriteLine("Fejl: Indtast venligst et heltal som antal.");
+            Console.WriteLine("Indtast antallet du ønsker at købe: ");
+        }
+
+        // Find the index of the product ID
+        int index = Array.IndexOf(productIds, productId);
+
+        // Check if there's enough stock
+        if (productStocks[index] >= quantity)
+        {
+            // Calculate total price
+            decimal totalPrice = productPrices[index] * quantity;
+
+            // Decrease the product stock
+            productStocks[index] -= quantity;
+
+            // Display purchase details
+            Console.WriteLine($"Du har købt {quantity} stk. af {productNames[index]} til {totalPrice:C}");
+
+            // Display new stock status
+            Console.WriteLine($"Ny lagerstatus for {productNames[index]}: {productStocks[index]}");
+        }
+        else
+        {
+            // Inform the user if there's not enough stock
+            Console.WriteLine("Fejl: Der er ikke nok på lager.");
+        }
+    }
+}
